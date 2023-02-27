@@ -55,5 +55,5 @@ def today():
 
 
 @pytest.fixture
-def yesterday(today):
+def tomorrow(today):
     return today + datetime.timedelta(days=1)
