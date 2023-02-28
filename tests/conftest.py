@@ -1,7 +1,10 @@
-import pytest
 import datetime
-from functions.four_bank_parser import SmsMessage, Expense, BankCard
 from decimal import Decimal
+import os
+import pytest
+
+from functions.level_1.four_bank_parser import SmsMessage, Expense, BankCard
+from functions.level_2.two_students import Student
 
 
 @pytest.fixture
@@ -57,3 +60,39 @@ def today():
 @pytest.fixture
 def tomorrow(today):
     return today + datetime.timedelta(days=1)
+
+
+@pytest.fixture
+def create_text():
+    def create_text_function(
+            num1: str | None, num2: str | None, num3: str | None
+        ) -> str:
+        if num1 == None or num2 == None or num3 == None:
+            return 'C:\empty_path'
+        text = f'{num1}\n{num2}\n{num3}'
+        with open('textfile.txt', 'w') as f:
+            f.write(text)
+        file_path = os.path.abspath(os.path.dirname('textfile')) + os.path.join(r'\textfile.txt')
+        return file_path
+    return create_text_function
+
+
+@pytest.fixture
+def student_petrov():
+    return Student(
+        first_name='Petrov', last_name='Ivan', telegram_account='@III'
+    )
+
+
+@pytest.fixture
+def student_ivanov():
+    return Student(
+        first_name='Ivanov', last_name='Petr', telegram_account='@PetR'
+    )
+
+
+@pytest.fixture
+def students(student_ivanov, student_petrov):
+    return [
+        student_ivanov, student_petrov
+    ]
