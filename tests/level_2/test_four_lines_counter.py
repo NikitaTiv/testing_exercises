@@ -3,16 +3,17 @@ import pytest
 
 
 @pytest.mark.parametrize(
-    'filepath, first_row, second_row, third_row, expected_result',
+    'mutable_argument, expected_result',
     [
-        (pytest.lazy_fixture('create_text'), '1', '#', '1', 2),
-        (pytest.lazy_fixture('create_text'), '1', '2', '1', 3),
-        (pytest.lazy_fixture('create_text'), '1', None, '1', None),
+        ('#', 2),
+        ('2', 3),
+        (None, None),
     ], 
     ids=[
-        'correctly_counts_rows_with_lattice', 'correctly_counts_rows_without_lattice',
+        'correctly_counts_rows_with_lattice',
+        'correctly_counts_rows_without_lattice',
         'handles_bad_links_correctly',
     ],
 )
-def test__count_lines_in(filepath, first_row, second_row, third_row, expected_result):
-    assert count_lines_in(filepath(first_row, second_row, third_row)) == expected_result
+def test__count_lines_in(create_text, mutable_argument, expected_result):
+    assert count_lines_in(create_text('1', mutable_argument, '1')) == expected_result
